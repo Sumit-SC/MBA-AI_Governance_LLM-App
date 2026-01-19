@@ -18,7 +18,8 @@ This project aims to offer a practical, hands-on environment for understanding t
 
 
 ## Ai-Governance LLM Powered App
-![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white)](https://mba-stream-app.streamlit.app/) 
+[![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white)](https://mba-stream-app.streamlit.app/)
+ 
 
 
 ## 🚀 How to Run Locally
