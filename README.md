@@ -8,6 +8,7 @@ The **AI Governance Workbench** is a comprehensive Streamlit application designe
 
 This project aims to offer a practical, hands-on environment for understanding the complexities of responsible AI development and deployment, emphasizing transparency, fairness, accountability, and security in AI systems.
 
+[![Streamlit App](https://static.streamlit.io)](https://mba-stream-app.streamlit.app/)
 ## ✨ Features
 
 * **🌐 Governance Dashboard:** A simulated overview of AI deployment, compliance, and risk trends with interactive charts.
@@ -22,8 +23,8 @@ Follow these steps to get the AI Governance Workbench running on your local mach
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/Sumit-SC/Project.git
-    cd Project
+    git clone https://github.com/Sumit-SC/MBA-AI_Governance_LLM-App.git
+    cd MBA-AI_Governance_LLM-App
     ```
 
 2.  **Create a Virtual Environment (Recommended):**
