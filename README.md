@@ -84,7 +84,7 @@ You can easily deploy this application to [Streamlit Community Cloud](https://st
 
 Alternatively, use this direct deployment link:
 
-[![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/Sumit-SC/Project/main/streamlit_app.py)
+[![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/Sumit-SC/MBA-AI_Governance_LLM-App/main/streamlit_app.py)
 
 
 ## 📚 Usage Guide
