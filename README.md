@@ -18,7 +18,7 @@ This project aims to offer a practical, hands-on environment for understanding t
 
 
 ## Ai-Governance LLM Powered App
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mba-stream-app.streamlit.app/) https://anaconda.org/conda-forge/streamlit/badges/latest_release_relative_date.svg
+![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white)(https://mba-stream-app.streamlit.app/) 
 
 
 ## 🚀 How to Run Locally
