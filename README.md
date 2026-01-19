@@ -8,7 +8,6 @@ The **AI Governance Workbench** is a comprehensive Streamlit application designe
 
 This project aims to offer a practical, hands-on environment for understanding the complexities of responsible AI development and deployment, emphasizing transparency, fairness, accountability, and security in AI systems.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mba-stream-app.streamlit.app/)
 ## ✨ Features
 
 * **🌐 Governance Dashboard:** A simulated overview of AI deployment, compliance, and risk trends with interactive charts.
@@ -16,6 +15,11 @@ This project aims to offer a practical, hands-on environment for understanding t
 * **📄 Document Summarizer:** Upload policy documents (.pdf, .txt, .docx) to receive AI-generated summaries. Also features interactive flashcards for key concepts.
 * **⚖️ Compliance Audit (Prototype):** A rule-based engine to check policy documents for the presence of key AI governance indicators, generating a downloadable markdown report.
 * **💬 AI Chat Assistant (with RAG):** An interactive chatbot for general AI governance inquiries. When a document is loaded in the Summarizer, the chatbot can answer questions based on its content using Retrieval-Augmented Generation.
+
+
+## Ai-Governance LLM Powered App
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://mba-stream-app.streamlit.app/) https://anaconda.org/conda-forge/streamlit/badges/latest_release_relative_date.svg
+
 
 ## 🚀 How to Run Locally
 
