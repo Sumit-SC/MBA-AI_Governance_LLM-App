@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+*.key
+*.pem
+
+# Streamlit secrets (keep example)
+.streamlit/secrets.toml
+
+# User uploads / generated data
+uploads/
+data/uploads/
