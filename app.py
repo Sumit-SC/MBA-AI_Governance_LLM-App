@@ -5,6 +5,7 @@ import streamlit as st
 import pandas as pd
 import PyPDF2
 import matplotlib.pyplot as plt
+import plotly.express as px
 import google.generativeai as genai
 from io import StringIO
 
@@ -181,8 +182,8 @@ if app_mode == "📄 Document Summarizer":
 
 # --- CSV Upload & Visualization ---
 elif app_mode == "📊 Data Visualizer":
-    st.header("Data Upload and Basic Visuals")
-    st.info("Upload a CSV file to visualize its data. Only numeric columns can be plotted. A sample dataset is available for quick testing.")
+    st.header("Data Upload and Visuals")
+    st.info("Upload a CSV file and build multiple charts (bar, line, scatter, histogram, pie, box). A sample dataset is available for quick testing.")
     
     st.sidebar.markdown("---")
     st.sidebar.subheader("External Resources for Data Visualizer:")
@@ -212,24 +213,81 @@ elif app_mode == "📊 Data Visualizer":
         st.dataframe(df.head())
 
         if not df.empty:
-            numeric_columns = df.select_dtypes(include=['number']).columns
-            if not numeric_columns.empty:
-                column_to_plot = st.selectbox("Select a numeric column for visualization", numeric_columns)
-                
-                fig, ax = plt.subplots(figsize=(10, 6))
-                
-                if df[column_to_plot].nunique() < 20 and df[column_to_plot].dtype in ['int64', 'float64']:
-                    df[column_to_plot].value_counts().sort_index().plot(kind='bar', ax=ax, color='skyblue')
-                    ax.set_title(f'Counts of {column_to_plot}')
-                    ax.set_ylabel('Count')
-                    plt.xticks(rotation=45, ha='right')
-                else:
-                    df[column_to_plot].hist(ax=ax, bins=20, color='lightgreen', edgecolor='black')
-                    ax.set_title(f'Histogram of {column_to_plot}')
-                    ax.set_ylabel('Frequency')
-                ax.set_xlabel(column_to_plot)
-                st.pyplot(fig)
-                plt.close(fig)
+            numeric_columns = df.select_dtypes(include=['number']).columns.tolist()
+            categorical_columns = df.select_dtypes(include=['object', 'category', 'bool']).columns.tolist()
+
+            if numeric_columns:
+                st.subheader("Chart Builder")
+                chart_types = st.multiselect(
+                    "Select chart types to create",
+                    ["Bar", "Line", "Scatter", "Histogram", "Pie", "Box"],
+                    default=["Bar", "Histogram"]
+                )
+
+                if not chart_types:
+                    st.info("Select at least one chart type to display.")
+
+                for chart in chart_types:
+                    with st.expander(f"{chart} chart options", expanded=False):
+                        if chart == "Bar":
+                            x_col = st.selectbox("X (category)", categorical_columns or df.columns.tolist(), key="bar_x")
+                            y_col = st.selectbox("Y (numeric)", numeric_columns, key="bar_y")
+                            agg = st.selectbox("Aggregation", ["sum", "mean", "count"], key="bar_agg")
+                            if agg == "count":
+                                bar_df = df.groupby(x_col).size().reset_index(name="count")
+                                fig = px.bar(bar_df, x=x_col, y="count", title=f"Count by {x_col}")
+                            else:
+                                bar_df = df.groupby(x_col)[y_col].agg(agg).reset_index()
+                                fig = px.bar(bar_df, x=x_col, y=y_col, title=f"{agg.title()} of {y_col} by {x_col}")
+                            st.plotly_chart(fig, use_container_width=True)
+
+                        elif chart == "Line":
+                            x_col = st.selectbox("X", df.columns.tolist(), key="line_x")
+                            y_col = st.selectbox("Y (numeric)", numeric_columns, key="line_y")
+                            fig = px.line(df, x=x_col, y=y_col, title=f"{y_col} over {x_col}")
+                            st.plotly_chart(fig, use_container_width=True)
+
+                        elif chart == "Scatter":
+                            x_col = st.selectbox("X (numeric)", numeric_columns, key="scatter_x")
+                            y_col = st.selectbox("Y (numeric)", numeric_columns, key="scatter_y")
+                            color_col = st.selectbox("Color (optional)", ["None"] + df.columns.tolist(), key="scatter_color")
+                            fig = px.scatter(
+                                df,
+                                x=x_col,
+                                y=y_col,
+                                color=None if color_col == "None" else color_col,
+                                title=f"{y_col} vs {x_col}"
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
+
+                        elif chart == "Histogram":
+                            col = st.selectbox("Numeric column", numeric_columns, key="hist_col")
+                            bins = st.slider("Bins", min_value=5, max_value=50, value=20, key="hist_bins")
+                            fig = px.histogram(df, x=col, nbins=bins, title=f"Distribution of {col}")
+                            st.plotly_chart(fig, use_container_width=True)
+
+                        elif chart == "Pie":
+                            names_col = st.selectbox("Category", categorical_columns or df.columns.tolist(), key="pie_names")
+                            value_col = st.selectbox("Values (numeric)", ["Count"] + numeric_columns, key="pie_values")
+                            if value_col == "Count":
+                                pie_df = df[names_col].value_counts().reset_index()
+                                pie_df.columns = [names_col, "count"]
+                                fig = px.pie(pie_df, names=names_col, values="count", title=f"Count by {names_col}")
+                            else:
+                                pie_df = df.groupby(names_col)[value_col].sum().reset_index()
+                                fig = px.pie(pie_df, names=names_col, values=value_col, title=f"{value_col} by {names_col}")
+                            st.plotly_chart(fig, use_container_width=True)
+
+                        elif chart == "Box":
+                            y_col = st.selectbox("Y (numeric)", numeric_columns, key="box_y")
+                            x_col = st.selectbox("X (optional category)", ["None"] + categorical_columns, key="box_x")
+                            fig = px.box(
+                                df,
+                                x=None if x_col == "None" else x_col,
+                                y=y_col,
+                                title=f"Box plot of {y_col}"
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
 
             else:
                 st.warning("No numeric columns found in the uploaded CSV (or sample data) for plotting.")

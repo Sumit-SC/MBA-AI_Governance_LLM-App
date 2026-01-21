@@ -8,6 +8,17 @@ The **AI Governance Workbench** is a comprehensive Streamlit application designe
 
 This project aims to offer a practical, hands-on environment for understanding the complexities of responsible AI development and deployment, emphasizing transparency, fairness, accountability, and security in AI systems.
 
+## Project Summary (Resume-Ready)
+
+The AI Governance Workbench is a multi-module Streamlit app that helps users explore responsible AI practices end‑to‑end. It combines governance dashboards, interactive data visualization, AI document summarization with RAG, and a rule‑based compliance audit to translate policy text into actionable insights. The app is designed for analysts and governance teams to prototype oversight workflows, explain risks, and generate evidence for AI compliance.
+
+**What it delivers:**
+- Governance dashboard with KPIs and risk trends
+- Data visualizer for CSV/JSON/XLSX with multi‑chart analysis
+- Document summarizer + flashcards using Google Gemini
+- Compliance audit prototype that outputs a downloadable report
+- AI chat assistant that can answer using uploaded documents (RAG)
+
 ## ✨ Features
 
 * **🌐 Governance Dashboard:** A simulated overview of AI deployment, compliance, and risk trends with interactive charts.
