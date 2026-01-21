@@ -24,7 +24,9 @@ This project aims to offer a practical, hands-on environment for understanding t
 
 ## 🚀 How to Run Locally
 
-Follow these steps to get the AI Governance Workbench running on your local machine:
+Follow these steps to get the AI Governance Workbench running on your local machine.
+
+### Option A — UV (recommended)
 
 1.  **Clone the Repository:**
     ```bash
@@ -32,12 +34,49 @@ Follow these steps to get the AI Governance Workbench running on your local mach
     cd MBA-AI_Governance_LLM-App
     ```
 
-2.  **Create a Virtual Environment (Recommended):**
+2.  **Initialize uv project (first-time only):**
+    ```bash
+    uv init --name "mba-ai-governance-llm-app"
+    uv add -r requirements.txt
+    ```
+
+3.  **Create venv + install dependencies:**
+    ```bash
+    uv venv
+    uv sync
+    ```
+
+4.  **Configure Google Gemini API Key:**
+    * **Option 1 (Streamlit secrets, recommended):**
+        * Create `.streamlit/secrets.toml` and add:
+            ```toml
+            GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+            ```
+        * Example file included: `.streamlit/secrets.toml.example`
+    * **Option 2 (Environment file):**
+        * Create a `.env` file in the project root and add:
+            ```env
+            GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+            ```
+        * Example file included: `env.example`
+    * You can obtain a Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+5.  **Run the Streamlit App:**
+    ```bash
+    uv run streamlit run app.py
+    ```
+    (Assuming your main Streamlit script is named `app.py`. If it's `main.py` or similar, adjust the command.)
+
+---
+
+### Option B — pip / venv
+
+1.  **Create a Virtual Environment (Recommended):**
     ```bash
     python -m venv venv
     ```
 
-3.  **Activate the Virtual Environment:**
+2.  **Activate the Virtual Environment:**
     * **Windows:**
         ```bash
         .\venv\Scripts\activate
@@ -47,28 +86,52 @@ Follow these steps to get the AI Governance Workbench running on your local mach
         source venv/bin/activate
         ```
 
-4.  **Install Dependencies:**
+3.  **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
     *(If `requirements.txt` is not provided, you'll need to install the dependencies manually. Key ones include `streamlit`, `pandas`, `PyPDF2`, `python-docx`, `google-generativeai`, `plotly`, `numpy`, `faiss-cpu` (or `faiss-gpu`), `wordcloud`, `matplotlib`, `openpxl`.)*
 
-5.  **Configure Google Gemini API Key:**
-    * Create a `.streamlit` folder in the root of your project directory if it doesn't exist.
-    * Inside `.streamlit`, create a file named `secrets.toml`.
-    * Add your Google Gemini API key to this file:
-        ```toml
-        GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
-        ```
+4.  **Configure Google Gemini API Key:**
+    * **Option 1 (Streamlit secrets, recommended):**
+        * Create `.streamlit/secrets.toml` and add:
+            ```toml
+            GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+            ```
+        * Example file included: `.streamlit/secrets.toml.example`
+    * **Option 2 (Environment file):**
+        * Create a `.env` file in the project root and add:
+            ```env
+            GOOGLE_API_KEY="YOUR_GEMINI_API_KEY_HERE"
+            ```
+        * Example file included: `env.example`
     * You can obtain a Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-6.  **Run the Streamlit App:**
+5.  **Run the Streamlit App:**
     ```bash
     streamlit run app.py
     ```
     (Assuming your main Streamlit script is named `app.py`. If it's `main.py` or similar, adjust the command.)
 
     The application should open in your default web browser.
+
+---
+
+## 🔧 Gemini Model Troubleshooting
+
+If you see a 404 error like:
+`models/... is not found for API version v1beta`,
+your API key does not have access to that model name.
+
+**Fix:**
+1. Open the app and use **Sidebar → Model diagnostics → List available Gemini models**.
+2. Copy a model name from the list.
+3. Set it as `GEMINI_MODEL` in `.env` or `.streamlit/secrets.toml`.
+
+Example:
+```env
+GEMINI_MODEL="gemini-flash-latest"
+```
 
 ## ☁️ Deploy to Streamlit Cloud
 

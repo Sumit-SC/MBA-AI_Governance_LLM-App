@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import PyPDF2
@@ -12,14 +15,39 @@ st.set_page_config(
     layout="wide"
 )
 
+# --- Helpers ---
+def load_env_file(env_path: Path) -> None:
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+def list_available_models() -> list[str]:
+    try:
+        return [m.name for m in genai.list_models()]
+    except Exception:
+        return []
+
+
 # --- Configure Google Gemini API Key securely ---
+load_env_file(Path(".env"))
 try:
     gemini_api_key = st.secrets["GOOGLE_API_KEY"]
     genai.configure(api_key=gemini_api_key)
-    gemini_model = genai.GenerativeModel('gemini-pro')
+    model_name = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
+    gemini_model = genai.GenerativeModel(model_name)
 except KeyError:
-    st.error("Google API Key not found in Streamlit secrets.toml. Please add it as `GOOGLE_API_KEY`.")
-    st.stop()
+    gemini_api_key = os.getenv("GOOGLE_API_KEY")
+    if not gemini_api_key:
+        st.error("Google API Key not found. Add `GOOGLE_API_KEY` to .streamlit/secrets.toml or .env.")
+        st.stop()
+    genai.configure(api_key=gemini_api_key)
+    model_name = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
+    gemini_model = genai.GenerativeModel(model_name)
 except Exception as e:
     st.error(f"Could not initialize Gemini API. Error: {e}")
     st.stop()
@@ -32,6 +60,15 @@ app_mode = st.sidebar.radio("Choose Functionality:", [
     "🤖 AI Chat Assistant",
     "🌐 Governance Dashboard"
 ])
+
+with st.sidebar.expander("Model diagnostics"):
+    st.caption("If Gemini returns a 404, list models for your API key.")
+    if st.button("List available Gemini models"):
+        models = list_available_models()
+        if models:
+            st.write(models)
+        else:
+            st.warning("No models returned. Check API key or network.")
 
 st.title("AI Governance Analytics & LLM Interface")
 st.markdown("---") # Horizontal line for visual separation
